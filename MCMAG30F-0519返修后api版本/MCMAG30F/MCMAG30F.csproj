@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{23E8954D-FF3E-4F62-9A94-6F26CD88EDDF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MCMAG30F</RootNamespace>
+    <AssemblyName>MCMAG30F</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>MCMAG30F.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CalibrateSensor, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\汪飞\Desktop\CalibrateSensor\CalibrateSensor\bin\Debug\CalibrateSensor.dll</HintPath>
+    </Reference>
+    <Reference Include="CyUSB, Version=1.2.2.0, Culture=neutral, PublicKeyToken=01f1d2b6c851ae92, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\CyUSB.dll</HintPath>
+    </Reference>
+    <Reference Include="MCMag30FDevice, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\Release\MCMag30FDevice.dll</HintPath>
+    </Reference>
+    <Reference Include="PLC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\Release\PLC.dll</HintPath>
+    </Reference>
+    <Reference Include="SigProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\Release\SigProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbnormalDataFileWriter.cs" />
+    <Compile Include="Algorithm.cs" />
+    <Compile Include="AutoSizeFormClass.cs" />
+    <Compile Include="DataBuffer.cs" />
+    <Compile Include="DataFileWriter.cs" />
+    <Compile Include="DoubleBufferListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DownsampleConverter.cs" />
+    <Compile Include="FilterByDiffFun.cs" />
+    <Compile Include="INIConfigHelper.cs" />
+    <Compile Include="MainConfig.cs" />
+    <Compile Include="MCMAG30FForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MCMAG30FForm.Designer.cs">
+      <DependentUpon>MCMAG30FForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="ProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgressForm.Designer.cs">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetDisplaySettingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetDisplaySettingForm.Designer.cs">
+      <DependentUpon>SetDisplaySettingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SetParametersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetParametersForm.Designer.cs">
+      <DependentUpon>SetParametersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShowCurveControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ShowCurveControl.Designer.cs">
+      <DependentUpon>ShowCurveControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShowDataControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ShowDataControl.Designer.cs">
+      <DependentUpon>ShowDataControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShowDeviceStatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShowDeviceStatusForm.Designer.cs">
+      <DependentUpon>ShowDeviceStatusForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShowFFTControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ShowFFTControl.Designer.cs">
+      <DependentUpon>ShowFFTControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SplashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SplashScreen.Designer.cs">
+      <DependentUpon>SplashScreen.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MCMAG30FForm.resx">
+      <DependentUpon>MCMAG30FForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressForm.resx">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="SetDisplaySettingForm.resx">
+      <DependentUpon>SetDisplaySettingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetParametersForm.resx">
+      <DependentUpon>SetParametersForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShowCurveControl.resx">
+      <DependentUpon>ShowCurveControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShowDataControl.resx">
+      <DependentUpon>ShowDataControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShowDeviceStatusForm.resx">
+      <DependentUpon>ShowDeviceStatusForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShowFFTControl.resx">
+      <DependentUpon>ShowFFTControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\legend.png" />
+    <Content Include="MCMAG30F.ico" />
+    <None Include="Resource\curve_32px.ico" />
+    <None Include="Resources\Icon1.ico" />
+    <None Include="Resource\Connect_PLC.ico" />
+    <None Include="Resource\Disconnect_PLC.ico" />
+    <Content Include="Resource\Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AxChartLib">
+      <Guid>{C5CBB026-24B9-49DE-BE7C-23C460B9CFFA}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="ChartLib">
+      <Guid>{C5CBB026-24B9-49DE-BE7C-23C460B9CFFA}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

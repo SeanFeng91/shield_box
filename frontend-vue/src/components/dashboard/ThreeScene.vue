@@ -40,9 +40,14 @@ let labelRenderer: CSS2DRenderer;
 let shieldingBoxMesh: THREE.Group; // 使用Group来组合面
 let interferenceSourceMesh: THREE.Mesh;
 const spatialPointMeshes: THREE.Mesh[] = []; // 存储测点网格对象
+const spatialPointLabels: CSS2DObject[] = []; // <-- 新增：存储标签对象
+
+const MAX_EXPECTED_DISPLAY_VALUE = 500000; // <-- 新增：用于颜色归一化的显示值上限
 
 const initThreeScene = () => {
   if (!sceneContainer.value) return;
+
+  sceneContainer.value.style.position = 'relative'; // <-- 确保sceneContainer是定位上下文
 
   const width = sceneContainer.value.clientWidth;
   const height = sceneContainer.value.clientHeight;
@@ -67,6 +72,7 @@ const initThreeScene = () => {
   labelRenderer.setSize(width, height);
   labelRenderer.domElement.style.position = 'absolute';
   labelRenderer.domElement.style.top = '0px';
+  labelRenderer.domElement.style.left = '0px'; // <-- 确保left也是0
   labelRenderer.domElement.style.pointerEvents = 'none'; //标签不应捕获鼠标事件
   sceneContainer.value.appendChild(labelRenderer.domElement);
 
@@ -158,7 +164,16 @@ const createInterferenceSource = () => {
 };
 
 const updateSpatialPoints = () => {
-  // Clear existing points
+  // 清理旧的标签
+  spatialPointLabels.forEach(label => {
+    if (label.element.parentElement) {
+      label.element.parentElement.removeChild(label.element); // 从DOM中安全移除
+    }
+    scene.remove(label); // 从场景中移除
+  });
+  spatialPointLabels.length = 0; // 清空数组
+
+  // 清理旧的测点网格
   spatialPointMeshes.forEach(mesh => scene.remove(mesh));
   spatialPointMeshes.length = 0;
 
@@ -181,7 +196,6 @@ const updateSpatialPoints = () => {
     const rawValue = point.value || 0;
     const displayValue = rawValue * 100000; // 先乘以100000
 
-    const MAX_EXPECTED_DISPLAY_VALUE = 500000; // 放大后值的归一化上限
     const normalizedValue = Math.min(Math.max(displayValue, 0), MAX_EXPECTED_DISPLAY_VALUE) / MAX_EXPECTED_DISPLAY_VALUE; 
     
     color.setHSL( (1.0 - normalizedValue) * 0.7, 1.0, 0.5); // 从蓝色 (0.7 HSL hue) 到红色 (0 HSL hue)
@@ -197,8 +211,35 @@ const updateSpatialPoints = () => {
     
     scene.add(pointMesh);
     spatialPointMeshes.push(pointMesh);
+
+    // 创建或更新标签
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'spatial-point-label'; // 可以用于CSS文件中的进一步样式化
+    
+    let labelText = `${point.name}: `;
+    if (point.channel_values && point.channel_values.length === 3) {
+      const chVals = point.channel_values.map(cv => (cv * 100000).toFixed(0)); // 放大并取整
+      labelText += `X:${chVals[0]}, Y:${chVals[1]}, Z:${chVals[2]}`;
+    } else {
+      labelText += `Mag:${displayValue.toFixed(0)}`; // 回退到显示幅值
+    }
+    labelDiv.textContent = labelText;
+
+    // 简洁样式 - 更明确地去除背景和边框
+    labelDiv.style.color = 'black';
+    labelDiv.style.backgroundColor = 'transparent'; // 明确设置透明背景
+    labelDiv.style.border = 'none'; // 明确移除边框
+    labelDiv.style.padding = '0'; // 明确移除内边距
+    labelDiv.style.fontSize = '12px';
+    labelDiv.style.whiteSpace = 'nowrap'; // 防止文本换行
+
+    const pointLabel = new CSS2DObject(labelDiv);
+    pointLabel.position.set(point.x, point.y + 25, point.z); // 标签位置略高于球体 (25mm)
+    spatialPointLabels.push(pointLabel);
+    scene.add(pointLabel);
   });
   console.log('ThreeScene: Total point meshes created:', spatialPointMeshes.length);
+  console.log('ThreeScene: Total point labels created:', spatialPointLabels.length);
 };
 
 

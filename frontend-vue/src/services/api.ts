@@ -22,7 +22,8 @@ export interface SpatialPoint {
   x: number;    // 坐标 x (mm)
   y: number;    // 坐标 y (mm)
   z: number;    // 坐标 z (mm)
-  value: number; // 幅值
+  value: number; // 幅值 (magnitude)
+  channel_values?: number[]; // <-- 新增：原始通道值
 }
 
 export interface LatestSpatialDataResponse {
@@ -78,6 +79,7 @@ export const fetchLatestSpatialData = async (): Promise<LatestSpatialDataRespons
         y: bp.coords[1],
         z: bp.coords[2],
         value: bp.magnitude, // map magnitude to frontend's 'value'
+        channel_values: bp.current_values, // <-- 新增：映射原始通道值
       }));
     }
 

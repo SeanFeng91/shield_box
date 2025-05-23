@@ -28,7 +28,7 @@
     <!-- 波形图区域 -->
     <div class="mt-8">
       <h2 class="text-2xl font-semibold text-gray-700 mb-4">通道波形图</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
         <div v-for="point in spatialPointsConfig" :key="point.name" class="bg-white p-4 rounded-xl shadow-lg h-[320px]">
           <h3 class="text-xl font-semibold text-gray-700 mb-2">{{ point.name }}</h3>
           <p class="text-sm text-gray-500 mb-2">通道: {{ point.channels.map(c => c + 1).join(', ') }}</p>

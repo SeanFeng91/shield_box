@@ -6,7 +6,7 @@
     <div v-else-if="error" class="flex items-center justify-center h-full">
       <p class="text-red-500">加载错误: {{ error }}</p>
     </div>
-    <Line v-if="!isLoading && !error && chartData && chartData.labels && chartData.labels.length > 0" :data="chartData" :options="chartOptions" class="h-full" />
+    <Line v-if="!isLoading && !error && chartData && chartData.datasets.length > 0 && chartData.datasets[0].data.length > 0" :data="chartData" :options="chartOptions" class="h-full" />
     <div v-else-if="!isLoading && !error" class="flex items-center justify-center h-full">
         <p class="text-gray-500">暂无波形数据。</p>
     </div>
@@ -26,6 +26,7 @@ import {
   LinearScale,   // For Y axis (value)
   PointElement,
   TimeScale, // More appropriate for time-based data if timestamps are absolute
+  Colors
 } from 'chart.js';
 import 'chartjs-adapter-date-fns'; // Adapter for date/time functionalities
 import { fetchWaveformData } from '@/services/api'; // 使用路径别名
@@ -39,7 +40,8 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
-  TimeScale
+  TimeScale,
+  Colors
 );
 
 interface Props {
@@ -59,6 +61,9 @@ const isInitialLoading = ref(true);
 const error = ref<string | null>(null);
 const chartDataInternal = ref<WaveformDataResponseItem[]>([]);
 
+const minTime = ref<number | undefined>(undefined);
+const maxTime = ref<number | undefined>(undefined);
+
 let intervalId: number | undefined;
 
 const lineColors = ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(75, 192, 192, 0.8)'];
@@ -67,19 +72,14 @@ const pointColors = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192
 const chartData = computed(() => {
   if (chartDataInternal.value.length === 0) {
     return {
-      labels: [],
       datasets: []
     };
   }
 
-  // 假设所有通道的时间戳是对齐的，我们取第一个通道的时间戳作为X轴标签
-  // 后端返回的 timestamp_ms 是毫秒级时间戳
-  const labels = chartDataInternal.value[0]?.data_points.map(dp => dp.timestamp_ms) || [];
-
   const datasets = chartDataInternal.value.map((channelWaveform, index) => {
     return {
       label: `通道 ${channelWaveform.channel_id + 1}`,
-      data: channelWaveform.data_points.map(dp => dp.value * 100000),
+      data: channelWaveform.data_points.map(dp => ({ x: dp.timestamp_ms, y: dp.value * 100000 })),
       borderColor: lineColors[index % lineColors.length],
       backgroundColor: pointColors[index % pointColors.length],
       tension: 0.1, // Line tension for smoothing
@@ -89,7 +89,6 @@ const chartData = computed(() => {
   });
 
   return {
-    labels,
     datasets
   };
 });
@@ -98,7 +97,7 @@ const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
   animation: {
-      duration: 0 // 禁用动画以获得更平滑的实时更新感觉
+    duration: 0, // 禁用动画以提高刷新性能
   },
   layout: {
     padding: {
@@ -109,22 +108,24 @@ const chartOptions = computed(() => ({
   scales: {
     x: {
       type: 'time',
+      min: minTime.value,
+      max: maxTime.value,
       time: {
         unit: 'second',
-        tooltipFormat: 'HH:mm:ss', // e.g., 14:30:45
         displayFormats: {
-          second: 'HH:mm:ss' // Format for scale labels
-        }
+          second: 'HH:mm:ss',
+        },
+        tooltipFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
       },
       title: {
         display: true,
         text: '时间'
       },
       ticks: {
+        source: 'auto',
         maxRotation: 0,
-        minRotation: 0,
         autoSkip: true,
-        maxTicksLimit: 10 //限制X轴刻度数量以避免拥挤
+        autoSkipPadding: 15,
       }
     },
     y: {
@@ -162,6 +163,27 @@ const loadWaveformData = async () => {
   try {
     const data = await fetchWaveformData(channelIds.value);
     chartDataInternal.value = data;
+
+    // 计算 minTime 和 maxTime
+    if (data.length > 0 && data[0].data_points.length > 0) {
+      let currentMaxTimestamp = 0;
+      data.forEach(channel => {
+        channel.data_points.forEach(dp => {
+          if (dp.timestamp_ms > currentMaxTimestamp) {
+            currentMaxTimestamp = dp.timestamp_ms;
+          }
+        });
+      });
+      if (currentMaxTimestamp > 0) {
+        maxTime.value = currentMaxTimestamp;
+        minTime.value = currentMaxTimestamp - 10000; // 10秒窗口
+      }
+    } else {
+      // 如果没有数据，清除时间范围，或者设置为默认
+      minTime.value = undefined;
+      maxTime.value = undefined;
+    }
+
     if (isInitialLoading.value) {
         isLoading.value = false;
         isInitialLoading.value = false;

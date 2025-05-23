@@ -222,6 +222,8 @@ onUnmounted(() => {
 <style scoped>
 .waveform-chart-container {
   min-height: 250px; /* 确保图表容器有最小高度 */
-  height: 100%;
+  /* height: 100%; */ /* 暂时移除，观察效果 */
+  display: flex; /* 新增 */
+  flex-direction: column; /* 新增 */
 }
 </style> 

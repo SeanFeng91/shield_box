@@ -90,7 +90,7 @@ const processedData = computed<ProcessedRow[]>(() => {
 <style scoped>
 /* 如果需要特定于此组件的样式，可以在这里添加 */
 .data-table-container {
-  max-height: 550px; /* 与RealtimeDataView中placeholder一致或按需调整 */
+  max-height: 600px; /* 与RealtimeDataView中placeholder一致或按需调整 */
   overflow-y: auto;
 }
 </style> 

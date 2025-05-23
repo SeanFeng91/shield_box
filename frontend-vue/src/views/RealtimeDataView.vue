@@ -7,7 +7,7 @@
 
     <!-- 主要内容区域: 3D图在左，数据表在右 -->
     <div class="grid grid-cols-1 lg:grid-cols-7 gap-6">
-      <div class="lg:col-span-5 bg-white p-6 rounded-xl shadow-xl h-[600px] lg:h-[700px]">
+      <div class="lg:col-span-5  p-6 rounded-xl  h-[600px] lg:h-[700px]">
         <h2 class="text-2xl font-semibold text-gray-700 mb-4">三维空间可视化</h2>
         <ThreeSceneComponent 
             :spatialData="latestData?.spatial_points_data"
@@ -15,10 +15,10 @@
         />
       </div>
 
-      <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-xl">
+      <div class="lg:col-span-2 p-6 rounded-xl ">
         <h2 class="text-2xl font-semibold text-gray-700 mb-1">最新通道数据</h2>
         <p class="text-sm text-gray-500 mb-4">时间: {{ latestData?.data_timestamp ? new Date(latestData.data_timestamp).toLocaleString() : '加载中...' }}</p>
-        <DataTableComponent 
+        <DataTableComponent class="h-full"
             :rawChannelData="latestData?.raw_channel_data"
             :spatialPointsConfig="spatialPointsConfig" 
         />
@@ -29,10 +29,10 @@
     <div class="mt-8">
       <h2 class="text-2xl font-semibold text-gray-700 mb-4">通道波形图</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
-        <div v-for="point in spatialPointsConfig" :key="point.name" class="bg-white p-4 rounded-xl shadow-lg h-[320px]">
+        <div v-for="point in spatialPointsConfig" :key="point.name" class=" p-4 rounded-xl  h-[340px]">
           <h3 class="text-xl font-semibold text-gray-700 mb-2">{{ point.name }}</h3>
           <p class="text-sm text-gray-500 mb-2">通道: {{ point.channels.map(c => c + 1).join(', ') }}</p>
-          <WaveformChartComponent :channelIds="point.channels" :pointName="point.name" class="h-[calc(100%-4rem)]" />
+          <WaveformChartComponent :channelIds="point.channels" :pointName="point.name" class="h-[calc(90%-0rem)]" />
         </div>
       </div>
     </div>
